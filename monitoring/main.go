@@ -17,6 +17,8 @@ const (
 	exitProgramCode     = 2
 	monitoraments       = 3
 	delay               = 2
+	logFileName         = "log.txt"
+	websitesFileName    = "websites.txt"
 )
 
 func main() {
@@ -37,7 +39,6 @@ func readCommand() int {
 	var command int
 
 	fmt.Scan(&command)
-	fmt.Println("commando: ", command)
 
 	return command
 }
@@ -112,25 +113,29 @@ func readWebsiteFiles() []string {
 	}
 
 	file.Close()
-	fmt.Println(sites)
 
 	return sites
 }
 
 func recordsLog(site string, status bool) {
-	file, err := os.OpenFile("log.txt", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	file, err := os.OpenFile(logFileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	date := time.Now().Format("02/01/2006 15:04:05")
 
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	fmt.Println(file)
 	file.WriteString(date + " " + site + " - online: " + strconv.FormatBool(status) + "\n")
 
 	file.Close()
 }
 
 func viewLog() {
-	fmt.Println("Viewing log")
+	file, err := os.ReadFile(logFileName)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println(string(file))
 }
