@@ -2,20 +2,20 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"net/http"
+	"os"
 	"time"
 )
 
 const (
 	startMonitoringCode = 0
-	viewLogCode = 1
-	exitProgramCode = 2
-	monitoraments = 3
-	delay = 2
+	viewLogCode         = 1
+	exitProgramCode     = 2
+	monitoraments       = 3
+	delay               = 2
 )
 
-func main(){
+func main() {
 	for {
 		showPanel()
 		command := readCommand()
@@ -23,7 +23,7 @@ func main(){
 	}
 }
 
-func showPanel(){
+func showPanel() {
 	fmt.Println("0 - Start monitoring")
 	fmt.Println("1 - View log")
 	fmt.Println("2 - Exit the program")
@@ -34,13 +34,13 @@ func readCommand() int {
 
 	fmt.Scan(&command)
 	fmt.Println("commando: ", command)
-	
+
 	return command
 }
 
-func executeCommand(command int){
+func executeCommand(command int) {
 	switch command {
-	case startMonitoringCode: 
+	case startMonitoringCode:
 		startMonitoring()
 	case viewLogCode:
 		viewLog()
@@ -52,11 +52,11 @@ func executeCommand(command int){
 	}
 }
 
-func startMonitoring(){
+func startMonitoring() {
 	fmt.Println("Starting monitoring")
 	sites := []string{"https://github.com/LuanTenorio", "https://www.youtube.com/"}
 
-	for i := 0; i < monitoraments; i++{
+	for i := 0; i < monitoraments; i++ {
 		for _, site := range sites {
 			checkSite(site)
 		}
@@ -65,23 +65,21 @@ func startMonitoring(){
 	}
 }
 
-func checkSite(site string){
+func checkSite(site string) {
 	resp, err := http.Get(site)
 
-	
-	
 	if err != nil {
 		fmt.Println("Error when making request for ", site)
 		return
 	}
 
-	if resp.StatusCode == 200{
+	if resp.StatusCode == 200 {
 		fmt.Println(site, " online")
-	}else{
+	} else {
 		fmt.Println(site, " down -", resp.StatusCode)
 	}
 }
 
-func viewLog(){
+func viewLog() {
 	fmt.Println("Viewing log")
 }
