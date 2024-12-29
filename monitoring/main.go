@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -82,6 +83,8 @@ func checkSite(site string) {
 	} else {
 		fmt.Println(site, " down -", resp.StatusCode)
 	}
+
+	recordsLog(site, resp.StatusCode == 200)
 }
 
 func readWebsiteFiles() []string {
@@ -112,6 +115,20 @@ func readWebsiteFiles() []string {
 	fmt.Println(sites)
 
 	return sites
+}
+
+func recordsLog(site string, status bool) {
+	file, err := os.OpenFile("log.txt", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	date := time.Now().Format("02/01/2006 15:04:05")
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println(file)
+	file.WriteString(date + " " + site + " - online: " + strconv.FormatBool(status) + "\n")
+
+	file.Close()
 }
 
 func viewLog() {
