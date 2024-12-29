@@ -1,12 +1,18 @@
 package main
 
-import "fmt"
-import "os"
+import (
+	"fmt"
+	"os"
+	"net/http"
+	"time"
+)
 
 const (
-	StartMonitoring = 0
-	ViewLog = 1
-	ExitProgram = 2
+	startMonitoringCode = 0
+	viewLogCode = 1
+	exitProgramCode = 2
+	monitoraments = 3
+	delay = 2
 )
 
 func main(){
@@ -34,11 +40,11 @@ func readCommand() int {
 
 func executeCommand(command int){
 	switch command {
-	case StartMonitoring: 
+	case startMonitoringCode: 
 		startMonitoring()
-	case ViewLog:
+	case viewLogCode:
 		viewLog()
-	case ExitProgram:
+	case exitProgramCode:
 		fmt.Println("Leaving the program")
 		os.Exit(0)
 	default:
@@ -48,7 +54,32 @@ func executeCommand(command int){
 
 func startMonitoring(){
 	fmt.Println("Starting monitoring")
+	sites := []string{"https://github.com/LuanTenorio", "https://www.youtube.com/"}
+
+	for i := 0; i < monitoraments; i++{
+		for _, site := range sites {
+			checkSite(site)
+		}
+
+		time.Sleep(delay * time.Second)
+	}
+}
+
+func checkSite(site string){
+	resp, err := http.Get(site)
+
 	
+	
+	if err != nil {
+		fmt.Println("Error when making request for ", site)
+		return
+	}
+
+	if resp.StatusCode == 200{
+		fmt.Println(site, " online")
+	}else{
+		fmt.Println(site, " down -", resp.StatusCode)
+	}
 }
 
 func viewLog(){
