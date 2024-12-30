@@ -5,13 +5,13 @@ import (
 	"learning_go/bank/customers"
 )
 
-type CurrentAccount struct {
+type SavingsAccount struct {
 	Titular                     customers.Titular
 	AgencyNumber, NumberMatters int
 	balance                     float64
 }
 
-func (c *CurrentAccount) Withdraw(value float64) bool {
+func (c *SavingsAccount) Withdraw(value float64) bool {
 	canWithdraw := value > 0 && value <= c.balance
 
 	if !canWithdraw {
@@ -24,7 +24,7 @@ func (c *CurrentAccount) Withdraw(value float64) bool {
 	return true
 }
 
-func (c *CurrentAccount) Deposit(value float64) bool {
+func (c *SavingsAccount) Deposit(value float64) bool {
 	if value <= 0 {
 		fmt.Println("Unable to deposit")
 		return false
@@ -35,7 +35,7 @@ func (c *CurrentAccount) Deposit(value float64) bool {
 	return true
 }
 
-func (c *CurrentAccount) Transfer(value float64, account *CurrentAccount) bool {
+func (c *SavingsAccount) Transfer(value float64, account *SavingsAccount) bool {
 	if c.balance <= 0 {
 		return false
 	}
@@ -51,6 +51,6 @@ func (c *CurrentAccount) Transfer(value float64, account *CurrentAccount) bool {
 	return false
 }
 
-func (c *CurrentAccount) getBalance() float64 {
+func (c *SavingsAccount) getBalance() float64 {
 	return c.balance
 }
