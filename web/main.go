@@ -16,30 +16,26 @@ type postgresConfig struct {
 }
 
 type Product struct {
-	Name        string
-	Description string
-	Price       float64
-	Amount      int
+	Id                int
+	Name, Description string
+	Price             float64
+	Amount            int
 }
 
+var postgresconfig postgresConfig
 var temp = template.Must(template.ParseGlob("templates/*.html"))
 
 func main() {
 	loadEnv()
 
-	postgresUrl := os.Getenv("PG_URL")
-	db := connectDB(postgresUrl)
-	defer db.Close()
+	postgresconfig = postgresConfig{os.Getenv("PG_URL")}
 
 	http.HandleFunc("/", index)
 	http.ListenAndServe(":8000", nil)
 }
 
 func index(w http.ResponseWriter, r *http.Request) {
-	products := []Product{
-		{"T-shirt", "Very pretty", 29, 10},
-		{" Notebook", "Very fast", 1999, 5},
-	}
+	products := getProducts()
 
 	temp.ExecuteTemplate(w, "Index", products)
 }
@@ -59,4 +55,38 @@ func connectDB(url string) *sql.DB {
 	}
 
 	return db
+}
+
+func getProducts() []Product {
+	db := connectDB(postgresconfig.url)
+
+	selectAllProducts, err := db.Query("select * from products")
+	if err != nil {
+		panic(err.Error())
+	}
+
+	product := Product{}
+	products := []Product{}
+
+	for selectAllProducts.Next() {
+		var id, amount int
+		var name, description string
+		var price float64
+
+		err := selectAllProducts.Scan(&id, &name, &description, &price, &amount)
+		if err != nil {
+			panic(err.Error())
+		}
+
+		product.Id = id
+		product.Name = name
+		product.Description = description
+		product.Price = price
+		product.Amount = amount
+
+		products = append(products, product)
+	}
+
+	defer db.Close()
+	return products
 }
