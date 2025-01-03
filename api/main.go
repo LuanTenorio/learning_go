@@ -1,7 +1,15 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"net/http"
+
+	"github.com/LuanTenorio/learning_go/api/routes"
+)
 
 func main() {
-	fmt.Println("init")
+	routes.CreateServer()
+
+	fmt.Println("server is running...")
+	http.ListenAndServe(":8000", nil)
 }
