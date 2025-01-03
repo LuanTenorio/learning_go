@@ -15,5 +15,5 @@ func CreateServer() {
 
 func handleRequest(r *mux.Router) {
 	r.HandleFunc("/", contreller.Home)
-	r.HandleFunc("/personalities", contreller.FindAllPersonalities)
+	personalityHandleRequest(r)
 }
