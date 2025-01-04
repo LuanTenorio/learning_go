@@ -14,12 +14,14 @@ import (
 var logger = log.New(os.Stdout, "PersonalityController: ", 2)
 
 func FindAllPersonalities(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-type", "application/json")
 	personalities := model.FindPersonalities()
 
 	json.NewEncoder(w).Encode(personalities)
 }
 
 func FindOnePersonality(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-type", "application/json")
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
 
@@ -40,6 +42,7 @@ func FindOnePersonality(w http.ResponseWriter, r *http.Request) {
 }
 
 func CreatePersonality(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-type", "application/json")
 	var personality model.Personality
 	json.NewDecoder(r.Body).Decode(&personality)
 
