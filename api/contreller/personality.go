@@ -38,3 +38,37 @@ func FindOnePersonality(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(personality)
 }
+
+func CreatePersonality(w http.ResponseWriter, r *http.Request) {
+	var personality model.Personality
+	json.NewDecoder(r.Body).Decode(&personality)
+
+	err := model.CreatePersonality(&personality)
+
+	if err != nil {
+		logger.Println(err)
+		w.WriteHeader(500)
+		w.Write([]byte(err.Error()))
+		return
+	}
+
+	json.NewEncoder(w).Encode(personality)
+}
+
+func DeletePersonality(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id, err := strconv.Atoi(vars["id"])
+
+	if err != nil {
+		logger.Println(err)
+		return
+	}
+
+	err = model.DeletePersonality(id)
+
+	if err != nil {
+		logger.Println(err)
+		w.WriteHeader(500)
+		w.Write([]byte(err.Error()))
+	}
+}

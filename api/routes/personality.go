@@ -6,6 +6,7 @@ import (
 )
 
 func personalityHandleRequest(r *mux.Router) {
-	r.HandleFunc("/personality/{id}", contreller.FindOnePersonality)
-	r.HandleFunc("/personalities", contreller.FindAllPersonalities)
+	r.HandleFunc("/personalities/{id}", contreller.FindOnePersonality).Methods("Get")
+	r.HandleFunc("/personalities", contreller.FindAllPersonalities).Methods("Get")
+	r.HandleFunc("/personalities", contreller.CreatePersonality).Methods("Post")
 }
