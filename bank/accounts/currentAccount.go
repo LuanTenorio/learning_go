@@ -2,7 +2,8 @@ package accounts
 
 import (
 	"fmt"
-	"learning_go/bank/customers"
+
+	"github.com/LuanTenorio/learning_go/bank/customers"
 )
 
 type CurrentAccount struct {
@@ -51,6 +52,6 @@ func (c *CurrentAccount) Transfer(value float64, account *CurrentAccount) bool {
 	return false
 }
 
-func (c *CurrentAccount) getBalance() float64 {
+func (c *CurrentAccount) GetBalance() float64 {
 	return c.balance
 }

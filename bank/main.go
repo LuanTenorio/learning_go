@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"learning_go/bank/accounts"
-	"learning_go/bank/customers"
+
+	"github.com/LuanTenorio/learning_go/bank/accounts"
+	"github.com/LuanTenorio/learning_go/bank/customers"
 )
 
 func main() {
